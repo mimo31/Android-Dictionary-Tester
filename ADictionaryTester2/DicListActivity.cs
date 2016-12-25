@@ -4,11 +4,7 @@ using Android.OS;
 using Android.Database;
 using Android.Views;
 
-using Java.Lang;
-
 using System;
-using System.IO;
-using System.Net;
 using System.Collections.Generic;
 
 using DictionaryBase;
