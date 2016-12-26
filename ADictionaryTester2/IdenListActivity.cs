@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 
 using DictionaryBase;
+using Android.Content;
 
 namespace com.github.mimo31.adictionarytester
 {
@@ -32,9 +33,8 @@ namespace com.github.mimo31.adictionarytester
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            // Set our view from the "main" layout resource
-            base.SetContentView (Resource.Layout.DicList);
+            
+            base.SetContentView(Resource.Layout.DicList);
 
             // add the click handler to the list
             ListView list = this.FindViewById<ListView>(Android.Resource.Id.List);
@@ -49,11 +49,23 @@ namespace com.github.mimo31.adictionarytester
             // get the instance of the Application class
             this.app = (SubApplication)this.Application;
 
-            // add an event handler to the event when the dictionaries in the Application class are updated
-            this.app.DictionariesUpdated += this.OnDictionariesUpdate;
-
             // update the list of identifiers
             this.ShowIdentifiers();
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            // add an event handler to the event when the dictionaries in the Application class are updated
+            this.app.DictionariesUpdated += this.OnDictionariesUpdate;
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+
+            this.app.DictionariesUpdated -= this.OnDictionariesUpdate;
         }
 
         protected override void OnResume()
@@ -75,7 +87,11 @@ namespace com.github.mimo31.adictionarytester
             if (this.app.DictionariesAvailable)
             {
                 string identifier = this.Identifiers[e.Position];
-                // TODO start the activity with specific dictionaries of this identifier
+
+                // show an Activity with a list of Dicionaries with the selected identifier
+                Intent intent = new Intent(this, typeof(DicListActivity));
+                intent.PutExtra("Identifier", identifier);
+                this.StartActivity(intent);
             }
         }
 
