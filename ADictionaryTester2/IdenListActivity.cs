@@ -17,7 +17,7 @@ namespace com.github.mimo31.adictionarytester
      * Shows a list of all possible Dictionary Identifiers.
      */
     [Activity(Label = "Dictionary Tester", MainLauncher = true, Icon = "@drawable/icon")]
-    public class DicListActivity : ListActivity
+    public class IdenListActivity : ListActivity
     {
         /**
          * Pointer to the Application class.
