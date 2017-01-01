@@ -43,6 +43,13 @@ namespace com.github.mimo31.adictionarytester
         private string[] DictionaryNames { get; set; } = new string[0];
 
         /**
+         * An array of test states of the Dictionaries. Corresponds to the array of the Dictonaries.
+         * When null, the states are not yet loaded.
+         * When an element is null, that Dictionary has not a started test.
+         */
+        public TestState[] TestStates { get; private set; } = null;
+
+        /**
          * An event triggered when an Dictionary update is completed.
          */
         public event EventHandler DictionariesUpdated;
@@ -71,6 +78,110 @@ namespace com.github.mimo31.adictionarytester
         }
 
         /**
+         * Loads the states of the tests for all dictionaries from the local storage if a save exist. Then saves the states if some were loaded.
+         * (the save is not useless because the saved states that hadn't a corresponding Dictionary were ignored in loading)
+         */
+        public void LoadStates()
+        {
+            // init the array to an array full of nulls
+            this.TestStates = new TestState[this.Dictionaries.Length];
+
+            // the path of the states save
+            string path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "states.dat");
+
+            if (File.Exists(path))
+            {
+                FileStream inputStream = new FileStream(path, FileMode.Open);
+                BinaryReader reader = new BinaryReader(inputStream);
+
+                // number of saved states
+                int entries = reader.ReadInt32();
+                while (entries-- != 0)
+                {
+                    // filename and version of the Dictionary of which is this a test state
+                    string filename = reader.ReadString();
+                    int version = reader.ReadInt32();
+
+                    bool found = false;
+
+                    // look for a Dictionary with such filename, if found, loads the state
+                    for (int i = 0; i < this.Dictionaries.Length; i++)
+                    {
+                        if (this.DictionaryNames[i].Equals(filename) && this.DictionaryVersions[i] >> 16 == version >> 16)
+                        {
+                            this.TestStates[i] = TestState.Load(this.Dictionaries[i], reader);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    // if not found, skips the state data
+                    if (!found)
+                    {
+                        TestState.SkipInStream(reader);
+                    }
+                }
+                reader.Close();
+                inputStream.Close();
+
+                // save the states
+                this.PostSaveStates();
+            }
+        }
+
+        /**
+         *  Calls for a save of the test states to local storage asynchronously.
+         */
+        public void PostSaveStates()
+        {
+            ((Action)this.SaveStates).BeginInvoke(null, null);
+        }
+
+        /**
+         * Saves the test states to local storage.
+         */
+        public void SaveStates()
+        {
+            // if nothing loaded
+            if (this.TestStates == null)
+            {
+                return;
+            }
+
+            // path to the test states file
+            string path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "states.dat");
+
+            FileStream outputStream = new FileStream(path, FileMode.Create);
+            BinaryWriter writer = new BinaryWriter(outputStream);
+
+            // find the number states to save
+            int entries = 0;
+            for (int i = 0; i < this.TestStates.Length; i++)
+            {
+                if (this.TestStates[i] != null)
+                {
+                    entries++;
+                }
+            }
+
+            writer.Write(entries);
+
+            // save all the test states with the Dictionary filenames and versions
+            for (int i = 0; i < this.TestStates.Length; i++)
+            {
+                if (this.TestStates[i] != null)
+                {
+                    writer.Write(this.DictionaryNames[i]);
+                    writer.Write(this.DictionaryVersions[i]);
+                    this.TestStates[i].Save(writer);
+                }
+            }
+
+            writer.Close();
+            outputStream.Close();
+        }
+
+        /**
          * Saves the loaded data about Dictionaries to the device.
          */
         private void SaveDictionariesToLocal()
@@ -83,7 +194,7 @@ namespace com.github.mimo31.adictionarytester
             string path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string metaPath = Path.Combine(path, "meta.txt");
 
-            // loaded the data about what's already saved
+            // load the data about what's already saved
             if (File.Exists(metaPath))
             {
                 FileStream inputStream = new FileStream(metaPath, FileMode.Open);
@@ -95,6 +206,8 @@ namespace com.github.mimo31.adictionarytester
                     names.Add(splits[0]);
                     versions.Add(int.Parse(splits[1]));
                 }
+                reader.Close();
+                inputStream.Close();
             }
 
             // save each of the Dictionaries if necessary

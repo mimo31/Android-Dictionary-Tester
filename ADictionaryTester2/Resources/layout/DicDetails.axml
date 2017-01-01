@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <TextView
+        android:text="Name:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:text="Identifier:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView1"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:text="Author:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView2"
+        android:id="@+id/textView3"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:text="Created on:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView3"
+        android:id="@+id/textView4"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp" />
+    <TextView
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/textView1"
+        android:id="@+id/nameTextView"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp" />
+    <TextView
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/identifierTextView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/nameTextView"
+        android:layout_toRightOf="@id/textView2" />
+    <TextView
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/identifierTextView"
+        android:id="@+id/authorTextView"
+        android:layout_toRightOf="@id/textView3"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/creationTimeTextView"
+        android:layout_toRightOf="@id/textView4"
+        android:layout_below="@id/authorTextView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
+    <Button
+        android:text="Continue Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/continueButton"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp" />
+    <Button
+        android:text="New Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/testButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp" />
+</RelativeLayout>

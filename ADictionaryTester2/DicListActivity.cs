@@ -41,7 +41,7 @@ namespace com.github.mimo31.adictionarytester
 
             base.SetContentView(Resource.Layout.DicList);
 
-            // Get a pointer to the Application class.
+            // get a pointer to the Application class
             this.app = (SubApplication)this.Application;
 
             // get the identifier from the intent
@@ -105,7 +105,9 @@ namespace com.github.mimo31.adictionarytester
 
         private void OnListItemClicked(object sender, AdapterView.ItemClickEventArgs e)
         {
-            // TODO open the Activity that shows info about a Dictionary
+            Intent intent = new Intent(this, typeof(DicDetailsActivity));
+            intent.PutExtra("DIndex", this.DictionaryIndexes[e.Position]);
+            this.StartActivity(intent);
         }
 
         private void OnDictionariesUpdate(object sender, EventArgs e)
