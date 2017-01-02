@@ -2,4 +2,3 @@
 abc.dic 0
 UnbestimmterartikelPhrases.dic 0
 BestimmterArtikelWords.dic 0
-BestimmterArtikelPhrases.dic 0
