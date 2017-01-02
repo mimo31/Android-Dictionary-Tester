@@ -31,6 +31,38 @@ namespace com.github.mimo31.adictionarytester
         private int CurrentTestItem { get; set; } = 0;
 
         /**
+         * Indicates whether the test has been already finished.
+         */
+        public bool Finished { get; private set; } = false;
+
+        /**
+         * The correct answer to the last wrongly answered question.
+         */
+        public string LastCorrect { get; private set; }
+
+        /**
+         * The number of questions asked in this test up to this point.
+         */
+        public int QuestionsAsked { get; private set; }
+
+        /**
+         * The number of correctly answered questions in this test up to this point.
+         */
+        public int RightAnswers { get; private set; }
+
+        /**
+         * The fraction of correctly answered questions of all asked questions in this test up to this point.
+         */
+        public double Accuracy { get
+            {
+                if (this.QuestionsAsked == 0)
+                {
+                    return 1;
+                }
+                return this.RightAnswers / (double)this.QuestionsAsked;
+            } }
+
+        /**
          * The Dictionary this is a test of.
          */
         private Dictionary Dic;
@@ -88,6 +120,10 @@ namespace com.github.mimo31.adictionarytester
                 obj.AnsRight[i] = reader.ReadBoolean();
             }
 
+            // read the numbers of asked questions
+            obj.QuestionsAsked = reader.ReadInt32();
+            obj.RightAnswers = reader.ReadInt32();
+
             return obj;
         }
 
@@ -112,6 +148,10 @@ namespace com.github.mimo31.adictionarytester
             {
                 reader.ReadBoolean();
             }
+            
+            // read the numbers of asked questions
+            reader.ReadInt32();
+            reader.ReadInt32();
         }
 
         /**
@@ -135,8 +175,100 @@ namespace com.github.mimo31.adictionarytester
             {
                 writer.Write(this.AnsRight[i]);
             }
+
+            // write the numbers of asked questions
+            writer.Write(this.QuestionsAsked);
+            writer.Write(this.RightAnswers);
         }
 
-        // TODO: code functions that serve the next question
+        /**
+         * Returns the question the user is now being asked.
+         * Returns the same value until the next call of PutAnswer.
+         * Returns an empty string if the test is already finished.
+         */
+        public string GetNextQuestion()
+        {
+            if (this.Finished)
+            {
+                return "";
+            }
+            int entryIndex = this.CurrentTestList[this.CurrentTestItem];
+            return this.Dic.GetEntry(entryIndex).Question;
+        }
+        
+        /**
+         * Submits the user's answer and returns whether it's correct.
+         */
+        public bool PutAnswer(string ans)
+        {
+            this.QuestionsAsked++;
+
+            // the Dictionary entry the current question is from
+            int entryIndex = this.CurrentTestList[this.CurrentTestItem];
+
+            // the correct answer
+            string correctAnswer = this.Dic.GetEntry(entryIndex).Answer;
+
+            // whether the user's answer is correct
+            bool correct = correctAnswer.Equals(ans);
+
+            if (!correct)
+            {
+                this.LastCorrect = correctAnswer;
+            }
+            else
+            {
+                this.RightAnswers++;
+            }
+
+            this.AnsRight[entryIndex] = correct;
+
+            this.CurrentTestItem++;
+
+            // if the end of the current question batch has been reached
+            if (this.CurrentTestItem == this.CurrentTestList.Length)
+            {
+                // the indexes of questions that will appear in the next question batch
+                List<int> newIndexes = new List<int>();
+
+                // the indexes of correctly answered questions
+                List<int> rightAnsIndexes = new List<int>();
+
+                // load all the incorrectly answered indexes into newIndexes and populate the list of correctly answered indexes
+                for (int i = 0; i < this.AnsRight.Length; i++)
+                {
+                    if (!this.AnsRight[i])
+                    {
+                        newIndexes.Add(i);
+                    }
+                    else
+                    {
+                        rightAnsIndexes.Add(i);
+                    }
+                }
+
+                // if there are no incorrectly answered indexes, the test is finished
+                if (newIndexes.Count == 0)
+                {
+                    this.Finished = true;
+                    return correct;
+                }
+
+                // number of already correctly answered questions that will be asked too
+                int extraCount = (int)Math.Sqrt(newIndexes.Count * (double)this.AnsRight.Length) - newIndexes.Count;
+
+                // shuffle the list of correctly answered indexes
+                rightAnsIndexes = rightAnsIndexes.OrderBy(v => this.R.NextDouble()).ToList();
+
+                // add the first extraCount correctly answered indexes to the new question batch
+                newIndexes.AddRange(rightAnsIndexes.Take(extraCount));
+
+                // shuffle the new question batch
+                this.CurrentTestList = newIndexes.OrderBy(v => this.R.NextDouble()).ToArray();
+
+                this.CurrentTestItem = 0;
+            }
+            return correct;
+        }
     }
 }

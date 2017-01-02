@@ -50,6 +50,11 @@ namespace com.github.mimo31.adictionarytester
         public TestState[] TestStates { get; private set; } = null;
 
         /**
+         * Determines whether the local Dictionary save may differ from the loaded data.
+         */
+        private bool Unsaved { get; set; }
+
+        /**
          * An event triggered when an Dictionary update is completed.
          */
         public event EventHandler DictionariesUpdated;
@@ -231,6 +236,49 @@ namespace com.github.mimo31.adictionarytester
                     this.Dictionaries[i].Save(Path.Combine(path, name));
                 }
             }
+
+            // delete all locally saved Dictionaries that aren't in the loaded ones
+            foreach (string name in names)
+            {
+                bool found = false;
+                foreach (string loadedName in this.DictionaryNames)
+                {
+                    if (loadedName.Equals(name))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    File.Delete(Path.Combine(path, name));
+                }
+            }
+
+            // write the new local meta file
+            FileStream outputStream = new FileStream(metaPath, FileMode.Create);
+            StreamWriter writer = new StreamWriter(outputStream);
+            for (int i = 0; i < this.Dictionaries.Length; i++)
+            {
+                writer.Write(this.DictionaryNames[i]);
+                writer.Write(' ');
+                writer.Write(this.DictionaryVersions[i].ToString());
+                writer.WriteLine();
+            }
+            writer.Close();
+            outputStream.Close();
+        }
+
+        /**
+         * Starts a save of Dictionaries asynchronously.
+         */
+        public void PostDictionarySave()
+        {
+            if (this.Unsaved)
+            {
+                ((Action)this.SaveDictionariesToLocal).BeginInvoke(null, null);
+                this.Unsaved = false;
+            }
         }
 
         /**
@@ -249,7 +297,7 @@ namespace com.github.mimo31.adictionarytester
         {
             if (this.ForegroundActivity != null)
             {
-                this.ForegroundActivity.RunOnUiThread(() => Toast.MakeText(this.ApplicationContext, "Dictionaries Updated from the Internet", ToastLength.Short).Show());
+                this.ForegroundActivity.RunOnUiThread(() => Toast.MakeText(this.ApplicationContext, message, ToastLength.Short).Show());
             }
         }
         
@@ -344,6 +392,10 @@ namespace com.github.mimo31.adictionarytester
             {
                 // fetch the remote meta file
                 WebRequest request = WebRequest.Create(REMOTE + "meta.txt");
+
+                // prevent using a cached response
+                request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+
                 WebResponse response = request.GetResponse();
 
                 StreamReader reader = new StreamReader(response.GetResponseStream());
@@ -386,12 +438,38 @@ namespace com.github.mimo31.adictionarytester
                             dictionaryNames.Add(name);
                             versions.Add(version);
                             dictionaries.Add(downloadedDictionary);
+
+                            // a new Dictionary was loaded, so mark the loaded data unsaved
+                            this.Unsaved = true;
                         }
                         catch (System.Exception)
                         {
 
                         }
                     }
+                }
+                if (this.TestStates != null)
+                {
+                    // create a new test states array corresponding to the new Dictionary array
+                    TestState[] newStates = new TestState[dictionaries.Count];
+
+                    // for each new Dictionary, look if its old version is compatible and if so,
+                    // make the test state of the new the test state of the old
+                    for (int i = 0; i < newStates.Length; i++)
+                    {
+                        for (int j = 0; j < this.Dictionaries.Length; j++)
+                        {
+                            if (this.DictionaryNames[j].Equals(dictionaryNames[i]))
+                            {
+                                if (this.DictionaryVersions[j] << 16 == versions[i] << 16)
+                                {
+                                    newStates[i] = this.TestStates[j];
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    this.TestStates = newStates;
                 }
                 this.DictionaryVersions = versions.ToArray();
                 this.Dictionaries = dictionaries.ToArray();

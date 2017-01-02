@@ -128,6 +128,9 @@ namespace com.github.mimo31.adictionarytester
             base.OnStop();
 
             this.app.DictionariesUpdated -= this.OnDictionariesUpdate;
+
+            // save request a save of the Dictionaries
+            this.app.PostDictionarySave();
         }
     }
 }
