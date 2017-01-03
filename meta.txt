@@ -2,4 +2,4 @@ UnbestimmterartikelPhrases.dic 0
 BestimmterArtikelWords.dic 0
 AnimalsTST.dic 0
 FurnitureTST.dic 0
-NJ11Lektion.dic 0
+NJ11Lektion.dic 1
