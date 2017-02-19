@@ -3,4 +3,5 @@ BestimmterArtikelWords.dic 0
 AnimalsTST.dic 0
 FurnitureTST.dic 0
 NJ11Lektion.dic 1
+NJ12Lektion.dic 0
 AJ2-5ABC.dic 0
