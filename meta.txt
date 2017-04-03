@@ -6,8 +6,5 @@ NJ11Lektion.dic 1
 NJ12Lektion.dic 0
 AJ2-5ABC.dic 0
 AJ2Chapter6ABC.dic 0
-<<<<<<< HEAD
 AJ2Ch1,2,3.dic 0
-=======
 NJKapitel1,2.dic 1
->>>>>>> 8e02717eeb9b5c2b02170c45f2754c5713457512
