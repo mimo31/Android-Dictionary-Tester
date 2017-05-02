@@ -3,7 +3,7 @@ BestimmterArtikelWords.dic 0
 AnimalsTST.dic 0
 FurnitureTST.dic 0
 NJ11Lektion.dic 2
-NJ12Lektion.dic 0
+NJ12Lektion.dic 1
 AJ2-5ABC.dic 0
 AJ2Chapter6ABC.dic 0
 AJ2Ch1,2,3.dic 2
