@@ -9,3 +9,4 @@ AJ2Chapter6ABC.dic 0
 AJ2Ch1,2,3.dic 2
 NJKapitel1,2.dic 1
 NJVerbPreps.dic 1
+NJStarke1.dic 1
