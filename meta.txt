@@ -12,3 +12,4 @@ NJVerbPreps.dic 1
 NJStarke1.dic 1
 NJStarke2.dic 0
 NJStarke34.dic 0
+NJPrepositionsFalle.dic 0
