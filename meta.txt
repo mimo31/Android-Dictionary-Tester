@@ -1,5 +1,7 @@
-UnbestimmterartikelPhrases.dic 0
-BestimmterArtikelWords.dic 0
+UnbestimmterartikelPhrases.dic 1
+UnbestimmterartikelWords.dic 0
+BestimmterArtikelPhrases.dic 0
+BestimmterArtikelWords.dic 1
 AnimalsTST.dic 0
 FurnitureTST.dic 0
 NJ11Lektion.dic 65536
@@ -12,4 +14,8 @@ NJVerbPreps.dic 1
 NJStarke1.dic 1
 NJStarke2.dic 0
 NJStarke34.dic 0
-NJPrepositionsFalle.dic 1
+NJPrepositionsFalle.dic 0
+NJPassivumPrasens.dic 0
+NJPassivumPrateritum.dic 0
+NJPassivumPerfektum.dic 0
+
