@@ -1,5 +1,5 @@
-UnbestimmterartikelPhrases.dic 1
-UnbestimmterartikelWords.dic 0
+UnbestimmterArtikelPhrases.dic 1
+UnbestimmterArtikelWords.dic 0
 BestimmterArtikelPhrases.dic 0
 BestimmterArtikelWords.dic 1
 AnimalsTST.dic 0
