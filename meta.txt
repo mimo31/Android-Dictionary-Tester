@@ -18,3 +18,4 @@ NJPrepositionsFalle.dic 0
 NJPassivumPrasens.dic 0
 NJPassivumPrateritum.dic 0
 NJPassivumPerfektum.dic 0
+AJ1sWordGame1.dic 0
