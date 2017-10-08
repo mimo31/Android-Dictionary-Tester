@@ -20,3 +20,5 @@ NJPassivumPrasens.dic 0
 NJPassivumPrateritum.dic 0
 NJPassivumPerfektum.dic 0
 AJ1sWordGame1.dic 0
+NJ1Lektion1.dic 0
+
