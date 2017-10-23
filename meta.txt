@@ -22,4 +22,3 @@ NJPassivumPerfektum.dic 0
 AJ1sWordGame1.dic 0
 NJ1Lektion1.dic 0
 AJ1sFirstTest.dic 0
-
