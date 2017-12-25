@@ -25,5 +25,5 @@ NJ1Lektion5.dic 0
 AJ1sFirstTest.dic 0
 AJ1sSecondQuarter.dic 0
 AJ1sCountableOrUncountable.dic 0
-NJ3ErsteLektion.dic 0
+NJ3ErsteLektion.dic 1
 NJ3ZweiteLektion.dic 0
