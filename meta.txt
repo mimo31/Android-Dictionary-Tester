@@ -27,3 +27,5 @@ AJ1sSecondQuarter.dic 0
 AJ1sCountableOrUncountable.dic 0
 NJ3ErsteLektion.dic 1
 NJ3ZweiteLektion.dic 0
+NJ3DritteLektion.dic 0
+NJ3Lektion1.dic 0
