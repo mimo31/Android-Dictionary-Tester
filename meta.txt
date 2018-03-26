@@ -29,3 +29,4 @@ NJ3ErsteLektion.dic 1
 NJ3ZweiteLektion.dic 0
 NJ3DritteLektion.dic 0
 NJ3Lektion1.dic 1
+
